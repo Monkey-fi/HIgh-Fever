@@ -11,11 +11,13 @@ public class CameraManager : MonoBehaviour
     private Vector3 cameraFollowVelocity = Vector3.zero;
 
     public float cameraFollowSpeed = 0.2f;
-    public float cameraLookSpeed = 2;
-    public float cameraPivotSpeed = 2;
+    public float cameraLookSpeed ;
+    public float cameraPivotSpeed;
 
     public float lookAngle; //camera look up and down
-    public float pivoteAngle;
+    public float pivotAngle;
+    public float minimumPivotAngle = -35;
+    public float maximumPivotAngle = 35;
 
     private void Awake()
     {
@@ -38,15 +40,17 @@ public class CameraManager : MonoBehaviour
     private void RotateCamera()
     {
         lookAngle = lookAngle + (inputManager.cameraInputX * cameraLookSpeed);
-        pivoteAngle = pivoteAngle - (inputManager.cameraInputY * cameraPivotSpeed);
+        pivotAngle = pivotAngle - (inputManager.cameraInputY * cameraPivotSpeed);
+        pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
+
         Vector3 rotation = Vector3.zero;
         rotation.y = lookAngle;
         Quaternion targetRotation = Quaternion.Euler(rotation);
-        transfrom.rotation = targetRotation;
+        transform.rotation = targetRotation;
 
         rotation = Vector3.zero;
-        rotation.x = pivoteAngle;
-        targetRotation = Quaternion.Eulers(rotation);
-        cameraPivotSpeed.localRotation = targetRotation;
+        rotation.x = pivotAngle;
+        targetRotation = Quaternion.Euler(rotation);
+        cameraPivot.localRotation = targetRotation;
     }
 }

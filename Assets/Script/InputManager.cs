@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
         {
             playerControls = new PlayerControls();
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-            playerControls.PlayerMovement.Camera.performed += int => cameraInput = int.ReadValue<Vector2>();
+            playerControls.PlayerMovement.Camera.performed += context => cameraInput = context.ReadValue<Vector2>();
         }
         playerControls.Enable();
     }
