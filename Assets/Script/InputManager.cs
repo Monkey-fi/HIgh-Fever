@@ -5,7 +5,9 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     PlayerControls playerControls; // class generated is referenced here as variable
+    PlayerLocomotion playerLocomotion;
     AnimatorManager animatorManager;
+    PlayerManager playerManager;
 
     public Vector2 movementInput;
     public Vector2 cameraInput;
@@ -13,13 +15,17 @@ public class InputManager : MonoBehaviour
     public float cameraInputX;
     public float cameraInputY;
 
-    private float moveAmount;
+    public float moveAmount;
     public float horizontalInput;
     public float verticalInput;
+
+    public bool b_Input;
     
     private void Awake()
     {
+        playerManager = GetComponent<PlayerManager>();
         animatorManager = GetComponent<AnimatorManager>();
+        playerLocomotion = GetComponent<PlayerLocomotion>();
     }
 
     private void OnEnable()
@@ -27,8 +33,11 @@ public class InputManager : MonoBehaviour
         if (playerControls == null)
         {
             playerControls = new PlayerControls();
+
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
             playerControls.PlayerMovement.Camera.performed += context => cameraInput = context.ReadValue<Vector2>();
+            playerControls.PlayerActions.B.performed += i => b_Input = true;
+            playerControls.PlayerActions.B.canceled += i => b_Input = false;
         }
         playerControls.Enable();
     }
@@ -41,7 +50,9 @@ public class InputManager : MonoBehaviour
     public void HandleAllInputs()
     {
         HandleMovementInput();
+        HandleSprintingInput();
         //handlejumpinginput and action input
+
     }
     
     private void HandleMovementInput()
@@ -53,6 +64,17 @@ public class InputManager : MonoBehaviour
         cameraInputY = cameraInput.y;
 
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput)); // abs is absolute - modulus
-        animatorManager.UpdateAnimatorValues(0, moveAmount);
+        animatorManager.UpdateAnimatorValues(0, moveAmount, playerLocomotion.isSprinting);
+    }
+    private void HandleSprintingInput()
+    {
+        if (b_Input && moveAmount > 0.5f)
+        {
+            playerLocomotion.isSprinting = true;  
+        }
+        else 
+        {
+            playerLocomotion.isSprinting = false;  
+        }
     }
 }

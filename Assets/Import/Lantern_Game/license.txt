@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lantern Game
+* source:	https://sketchfab.com/3d-models/lantern-game-dc05c896e2df4f21b8131bbde9f5bc55
+* author:	Karma (https://sketchfab.com/singhritendra1501)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lantern Game" (https://sketchfab.com/3d-models/lantern-game-dc05c896e2df4f21b8131bbde9f5bc55) by Karma (https://sketchfab.com/singhritendra1501) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

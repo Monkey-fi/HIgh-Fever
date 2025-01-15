@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    Animator animator;
     InputManager inputManager;
     CameraManager cameraManager;
     PlayerLocomotion playerLocomotion;
 
+    public bool isInteracting;
+
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         inputManager = GetComponent<InputManager>();
         cameraManager = FindObjectOfType<CameraManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
@@ -28,5 +32,7 @@ public class PlayerManager : MonoBehaviour
     private void LateUpdate()
     {
         cameraManager.HandleAllCameraMovement(); // changed FollowTarget to "" and public to "private" in cameramanager 
+
+        isInteracting = animator.GetBool("isInteracting");
     }
 }

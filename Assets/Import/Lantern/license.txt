@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lantern
+* source:	https://sketchfab.com/3d-models/lantern-a6d28fadc65448b8942fb940e987e47e
+* author:	Abdullah (https://sketchfab.com/3bdu11ah)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lantern" (https://sketchfab.com/3d-models/lantern-a6d28fadc65448b8942fb940e987e47e) by Abdullah (https://sketchfab.com/3bdu11ah) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
