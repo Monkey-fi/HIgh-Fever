@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
 
     public bool isInteracting;
+    public bool isJumping;
 
     private void Awake()
     {
@@ -34,5 +35,7 @@ public class PlayerManager : MonoBehaviour
         cameraManager.HandleAllCameraMovement(); // changed FollowTarget to "" and public to "private" in cameramanager 
 
         isInteracting = animator.GetBool("isInteracting");
+        this.isJumping = animator.GetBool("isJumping");
+        animator.SetBool("isGrounded", playerLocomotion.isGrounded);
     }
 }

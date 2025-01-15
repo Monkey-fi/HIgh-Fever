@@ -18,15 +18,21 @@ public class PlayerLocomotion : MonoBehaviour
     public float fallingVelocity;
     public LayerMask groundLayer;
     public float rayCastHeightOffSet = 0.5f;
+
     [Header("Movement Flags")]
     public bool isSprinting;
     public bool isGrounded;
+    public bool isJumping;
 
     [Header("Movement Speeds")]
     public float walkingSpeed = 1.5f;
     public float runningSpeed = 5;
     public float sprintingSpeed = 7;
     public float rotationSpeed = 5;
+
+    [Header("Jump Speeds")]
+    public float jumpHeight = 3;
+    public float gravityIntensity = 9.81f; // always negative 
 
     private void Awake()
     {
@@ -76,6 +82,9 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleRotation()
     {
+        if (isJumping)
+            return;
+
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = cameraObject.forward * inputManager.verticalInput;
@@ -98,7 +107,8 @@ public class PlayerLocomotion : MonoBehaviour
         RaycastHit hit;
         Vector3 raycastOrigin = transform.position;
         raycastOrigin.y = raycastOrigin.y + rayCastHeightOffSet;
-        if (!isGrounded)
+
+        if (!isGrounded && !isJumping)
         {
             if (!playerManager.isInteracting)
             {
@@ -109,7 +119,7 @@ public class PlayerLocomotion : MonoBehaviour
             playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
         }
 
-        if (Physics.SphereCast(raycastOrigin, 0.2f, -Vector3.up, out hit, groundLayer))
+        if (Physics.SphereCast(raycastOrigin, 0.2f, -Vector3.up, out hit, rayCastHeightOffSet + 0.1f, groundLayer))//added rayCastHeightOffSet + 0.1f //for  jump error
         {
             if (!isGrounded && !playerManager.isInteracting){
                 animatorManager.PlayTargetAnimation("Land", true);  
@@ -121,6 +131,20 @@ public class PlayerLocomotion : MonoBehaviour
         else
         {
             isGrounded = false;
+        }
+    }
+
+    public void HandleJumping()
+    {
+        if (isGrounded)
+        {
+            animatorManager.animator.SetBool("isJumping", true);
+            animatorManager.PlayTargetAnimation("Jump", false);
+
+            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            Vector3 playerVelocity = playerRigidbody.velocity;// changes moveDirection; to playerRigidbody.velocity; // for jump error
+            playerVelocity.y = jumpingVelocity;
+            playerRigidbody.velocity = playerVelocity;
         }
     }
 }
