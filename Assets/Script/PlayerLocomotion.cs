@@ -33,6 +33,8 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Jump Speeds")]
     public float jumpHeight = 3;
     public float gravityIntensity = 9.81f; // always negative 
+    public float stepHeight = 2;
+    public float stepDistance = 1; 
 
     private void Awake()
     {
@@ -54,31 +56,71 @@ public class PlayerLocomotion : MonoBehaviour
         HandleRotation();
     }
 
+    //private void HandleMovement()
+    // {
+    //     moveDirection = cameraObject.forward * inputManager.verticalInput;
+    //     moveDirection += cameraObject.right * inputManager.horizontalInput;
+    //     moveDirection.Normalize();
+    //     moveDirection.y = 0;
+
+    //     float speed = isSprinting ? sprintingSpeed : (inputManager.moveAmount >= 0.5f ? runningSpeed : walkingSpeed);
+    //     Vector3 movementVelocity = moveDirection * speed;
+
+    //     // Step handling
+    //     if (isGrounded && movementVelocity != Vector3.zero)
+    //     {
+    //         RaycastHit hit;
+    //         Vector3 origin = transform.position + Vector3.up * stepHeight; // stepHeight is the maximum height of a step the player can climb
+    //         if (Physics.Raycast(origin, moveDirection, out hit, stepDistance)) // stepDistance is how far ahead to check for a step
+    //         {
+    //             float stepHeightDifference = hit.point.y - transform.position.y;
+    //             if (stepHeightDifference > 0 && stepHeightDifference <= stepHeight)
+    //             {
+    //                 // Move player up to the step height
+    //                 playerRigidbody.position += Vector3.up * stepHeightDifference;
+    //             }
+    //         }
+    //     }
+
+    //     playerRigidbody.velocity = new Vector3(movementVelocity.x, playerRigidbody.velocity.y, movementVelocity.z);
+    // }
     private void HandleMovement()
     {
         moveDirection = cameraObject.forward * inputManager.verticalInput;
-        moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
+        moveDirection += cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        if (isSprinting)
+        float speed = isSprinting ? sprintingSpeed : (inputManager.moveAmount >= 0.5f ? runningSpeed : walkingSpeed);
+        Vector3 movementVelocity = moveDirection * speed;
+
+        // Step handling
+        if (isGrounded && movementVelocity != Vector3.zero)
         {
-            moveDirection = moveDirection * sprintingSpeed;
-        }
-        else{
-            if (inputManager.moveAmount >= 0.5f)
+            RaycastHit hitLower;
+            RaycastHit hitUpper;
+            Vector3 originLower = transform.position + Vector3.up * 0.1f; // Slightly above ground
+            Vector3 originUpper = transform.position + Vector3.up * stepHeight; // At step height
+
+            if (Physics.Raycast(originLower, moveDirection, out hitLower, stepDistance) &&
+                !Physics.Raycast(originUpper, moveDirection, out hitUpper, stepDistance))
             {
-                moveDirection = moveDirection * runningSpeed;
+                // Smoothly move up to the step height
+                float stepAdjustment = Mathf.MoveTowards(playerRigidbody.velocity.y, stepHeight, Time.deltaTime * speed);
+                playerRigidbody.velocity = new Vector3(movementVelocity.x, stepAdjustment, movementVelocity.z);
             }
             else
             {
-                moveDirection = moveDirection * walkingSpeed;
+                playerRigidbody.velocity = new Vector3(movementVelocity.x, playerRigidbody.velocity.y, movementVelocity.z);
             }
         }
-
-        Vector3 movementVelocity = moveDirection;
-        playerRigidbody.velocity = movementVelocity;
+        else
+        {
+            playerRigidbody.velocity = new Vector3(movementVelocity.x, playerRigidbody.velocity.y, movementVelocity.z);
+        }
     }
+
+
 
     private void HandleRotation()
     {
@@ -106,7 +148,9 @@ public class PlayerLocomotion : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 raycastOrigin = transform.position;
-        raycastOrigin.y = raycastOrigin.y + rayCastHeightOffSet;
+        Vector3 targetPosition;
+       // raycastOrigin.y = raycastOrigin.y + rayCastHeightOffSet;
+        targetPosition = transform.position;
 
         if (!isGrounded && !isJumping)
         {
@@ -121,10 +165,13 @@ public class PlayerLocomotion : MonoBehaviour
 
         if (Physics.SphereCast(raycastOrigin, 0.2f, -Vector3.up, out hit, rayCastHeightOffSet + 0.1f, groundLayer))//added rayCastHeightOffSet + 0.1f //for  jump error
         {
-            if (!isGrounded && !playerManager.isInteracting){
+            if (!isGrounded && !playerManager.isInteracting)
+            {
                 animatorManager.PlayTargetAnimation("Land", true);  
             }
 
+            Vector3 rayCastHitPoint = hit.point;
+            targetPosition.y = rayCastHitPoint.y;   
             inAirTimer = 0;
             isGrounded = true;
         }
@@ -132,6 +179,18 @@ public class PlayerLocomotion : MonoBehaviour
         {
             isGrounded = false;
         }
+        //if (isGrounded && !isJumping)
+        //{
+        //    if (playerManager.isInteracting || inputManager.moveAmount > 0)
+        //    {
+        //        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / 0.1f);
+        //    }
+
+        //    else 
+        //    {
+        //        transform.position = targetPosition;
+        //    }
+        //}
     }
 
     public void HandleJumping()
