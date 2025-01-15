@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Sparsh/UI.unity
+    guid: f849c95c435655e40b7d1affeedac4fb
+  - enabled: 1
+    path: Assets/Sparsh/playScene.unity
+    guid: 2b362e87c9fb3cf46bf579338cadc9ae
+  - enabled: 1
+    path: Assets/Sparsh/Settings.unity
+    guid: d26940056cd94cc46a2a9562fa2538f5
   m_configObjects: {}
