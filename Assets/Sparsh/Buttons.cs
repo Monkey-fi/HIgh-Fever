@@ -8,6 +8,10 @@ public class Buttons : MonoBehaviour
     public void play()
     {
         SceneManager.LoadScene(1);
+    }  
+    public void back()
+    {
+        SceneManager.LoadScene(0);
     }
     public void settings()
     {
@@ -17,4 +21,5 @@ public class Buttons : MonoBehaviour
     {
         Application.Quit();
     }
+
 }

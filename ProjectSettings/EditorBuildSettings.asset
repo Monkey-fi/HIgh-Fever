@@ -5,16 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Sparsh/UI.unity
     guid: f849c95c435655e40b7d1affeedac4fb
   - enabled: 1
-    path: Assets/Sparsh/playScene.unity
-    guid: 2b362e87c9fb3cf46bf579338cadc9ae
+    path: Assets/EasyStart Third Person Controller/Demo 1.unity
+    guid: 99b9a064f73df9b46b5c3b57ac45fd90
   - enabled: 1
-    path: Assets/Sparsh/Settings.unity
-    guid: d26940056cd94cc46a2a9562fa2538f5
+    path: Assets/Sparsh/UI 1.unity
+    guid: 9578842065e530143abe340123989887
   m_configObjects: {}
